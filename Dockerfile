@@ -16,7 +16,7 @@ RUN gunzip 9.0.0.0-IBM-MQC-Redist-LinuxX64.tar.gz \
     && useradd --system --uid 888 --gid mqm mqm  \
 
 #Add user=morten to group=mqm:
-    && usermod -aG mqm root   \
+    && usermod -aG mqm root
  
 
 WORKDIR /app
