@@ -57,7 +57,7 @@
   <service name="StockQuoteService">
     <documentation>My first service</documentation>
     <port name="StockQuotePort" binding="tns:StockQuoteSoapBinding">
-      <soap:address location="http://localhost:8001/stockquote"/>
+      <soap:address location="http://localhost:8888/stockquote"/>
     </port>
   </service>
 
