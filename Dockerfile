@@ -1,5 +1,5 @@
-#FROM centos:7
-FROM debian:jessie-slim 
+FROM centos:7
+#FROM debian:jessie-slim 
 
 WORKDIR /usr
 
