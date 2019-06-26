@@ -1,4 +1,5 @@
 {
+    //server configurations
     "stockServer":"localhost",
     "stockServerPort": "8888"
 }
