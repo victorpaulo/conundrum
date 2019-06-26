@@ -1,47 +1,38 @@
-var mq = require('ibmmq');
 
-module.exports = {
-    
-    connectToMQ: function(mqServer, mqPort, queueManager, channel, queueName) {
-        var config = {};
-       
-        config.MQC = mq.MQC; // Want to refer to this export directly for simplicity
-    
-        // The queue manager and queue to be used. These can be overridden on command line.
-        config.qMgr = queueManager;
-        config.qName = queueName;
-        config.mqmd = new mq.MQMD(); // Defaults are fine.
-        config.pmo = new mq.MQPMO();
-        config.cd = new mq.MQCD();
-        config.cno = new mq.MQCNO();
-    
-        //cd.ConnectionName = "localhost(1414)";
-        config.cd.ConnectionName =  mqServer +"("+ mqPort +")"
-        config.cd.ChannelName = channel;
-        config.csp = new mq.MQCSP();
-    
-        config.cno.ClientConn = cd;  
-        config.cno.Options = MQC.MQCNO_CLIENT_BINDING; // use MQCNO_CLIENT_BINDING to connect as client
-        return config;
-    },
-    putMsg: function putMessage(hObj, config) {
+    var mq = require('ibmmq');
+    var MQC = mq.MQC; // Want to refer to this export directly for simplicity
+  
+    // The queue manager and queue to be used. These can be overridden on command line.
+    var qMgr = "QM1";
+    var qName = "soa.log";
+    var mqmd = new mq.MQMD(); // Defaults are fine.
+    var pmo = new mq.MQPMO();
+    var cd = new mq.MQCD();
+    var cno = new mq.MQCNO();
+  
+    cd.ConnectionName = "localhost(1414)";
+    cd.ChannelName = "CHAN1";
+    var csp = new mq.MQCSP();
+  
+    cno.ClientConn = cd;  
+    cno.Options = MQC.MQCNO_CLIENT_BINDING; // use MQCNO_CLIENT_BINDING to connect as client
+  
+    function putMessage(hObj) {
       var msg = Buffer.from(JSON.stringify(coff));
       // Describe how the Put should behave
-      config.pmo.Options = config.MQC.MQPMO_NO_SYNCPOINT |
-                            config.MQC.MQPMO_NEW_MSG_ID |
-                            config.MQC.MQPMO_NEW_CORREL_ID;
+      pmo.Options = MQC.MQPMO_NO_SYNCPOINT |
+                    MQC.MQPMO_NEW_MSG_ID |
+                    MQC.MQPMO_NEW_CORREL_ID;
   
-      mq.Put(hObj,config.mqmd,config.pmo,msg,function(err) {
+      mq.Put(hObj,mqmd,pmo,msg,function(err) {
         if (err) {
           console.log(formatErr(err));
         } else {
           console.log("MQPUT successful");
         }
       });
-    },
-
-    openConn:  function(config) {
-      mq.Connx(config.qMgr, config.cno, function (err, hConn) {
+    }
+    mq.Connx(qMgr, cno, function (err, hConn) {
       if (err) {
         console.log((err));
       } else {
@@ -63,5 +54,3 @@ module.exports = {
         });
       }
     });
-  }
-}
